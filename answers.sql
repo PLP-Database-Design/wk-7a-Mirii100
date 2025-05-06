@@ -1,25 +1,23 @@
 --QUESTION 1 
 --i will showcase understanding on First, Second, and Third Normal Forms (1NF, 2NF, 3NF) to eliminate redundancy and optimize data storage.
 -- Create a new table to store the data in 1NF
-CREATE TABLE ProductDetail_1NF (
+CREATE TABLE ProductDetail (
     OrderID INT,
     CustomerName VARCHAR(100),
     Product VARCHAR(100)
 );
 
 -- Insert data into the new table by splitting the Products column
-INSERT INTO ProductDetail_1NF (OrderID, CustomerName, Product)
-SELECT 
-    OrderID,
-    CustomerName,
-    TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(Products, ',', numbers.n), ',', -1)) AS Product
-FROM 
-    ProductDetail,
-    (SELECT 1 AS n UNION SELECT 2 UNION SELECT 3) numbers
-WHERE 
-    n <= 1 + (LENGTH(Products) - LENGTH(REPLACE(Products, ',', '')))
-ORDER BY 
-    OrderID, n;
+INSERT INTO ProductDetail (OrderID, CustomerName, Product)
+VALUES
+(101, 'John Doe', 'Laptop'),
+(101, 'John Doe', 'Mouse'),
+(102, 'Jane Smith', 'Tablet'),
+(102, 'Jane Smith', 'Keyboard'),
+(102, 'Jane Smith', 'Mouse'),
+(103, 'Emily Clark', 'Phone');
+
+
 
 -- end of question  1
 
@@ -30,9 +28,14 @@ CREATE TABLE Orders (
     OrderID INT PRIMARY KEY,
     CustomerName VARCHAR(100)
 );
+INSERT INTO Orders (OrderID, CustomerName)
+VALUES
+(101, 'John Doe'),
+(102, 'Jane Smith'),
+(103, 'Emily Clark');
 
 -- Create the OrderDetails_2NF table to store OrderID, Product, and Quantity
-CREATE TABLE OrderDetails_2NF (
+CREATE TABLE OrderDetails (
     OrderID INT,
     Product VARCHAR(100),
     Quantity INT,
@@ -46,8 +49,14 @@ SELECT DISTINCT OrderID, CustomerName
 FROM OrderDetails;
 
 -- Insert OrderID, Product, and Quantity into OrderDetails_2NF table
-INSERT INTO OrderDetails_2NF (OrderID, Product, Quantity)
-SELECT OrderID, Product, Quantity
-FROM OrderDetails;
+INSERT INTO OrderDetails (OrderID, Product, Quantity)
+
+VALUES
+(101, 'Laptop', 2),
+(101, 'Mouse', 1),
+(102, 'Tablet', 3),
+(102, 'Keyboard', 1),
+(102, 'Mouse', 2),
+(103, 'Phone', 1);
 
 -- END OF QUESTION 2 
